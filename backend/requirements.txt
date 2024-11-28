@@ -1,0 +1,5 @@
+django
+django-restframework
+djangorestframework-simplejwt
+python-dotenv
+psycopg2
