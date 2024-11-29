@@ -12,13 +12,18 @@ from threading import Thread
 User = get_user_model()
 
 
-class UserSerializer(serializers.Serializer):
+class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "is_active", "email",
-                  "first_name","last_name", "full_name"
-                 )
+        fields = (
+            "id", 
+            "is_active", 
+            "email",
+            "first_name",
+            "last_name", 
+            "full_name"
+            )
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)

@@ -3,10 +3,8 @@ import API_ROUTE from "./routes";
 
 const getInvestmentPlans = async (data: any) => {
   try {
-    return await api<ITLoginToken>({
-      url: API_ROUTE.login,
-      data,
-      method: "POST",
+    return await api<ITInvestmentPlanRes>({
+      url: API_ROUTE.investment,
     });
   } catch (err) {
     import.meta.env.DEV && console.error(err);
@@ -17,7 +15,7 @@ const getInvestmentPlans = async (data: any) => {
 
 const getInvestments = async (data: any) => {
   try {
-    return await api<ITLoginToken>({
+    return await api<any>({
       url: API_ROUTE.login,
       data,
       method: "POST",
@@ -31,7 +29,7 @@ const getInvestments = async (data: any) => {
 
 const getInvestment = async (data: any) => {
   try {
-    return await api<ITLoginToken>({
+    return await api<any>({
       url: API_ROUTE.login,
       data,
       method: "POST",

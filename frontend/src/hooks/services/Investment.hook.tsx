@@ -8,7 +8,7 @@ export function useGetInvestmentPlans({ methods }: ITInvestmentFilterMethod) {
   });
 
   return useQuery({
-    queryKey: ["blogs", payload],
+    queryKey: ["investment", payload],
     queryFn: async () => INVESTMENT_API.getInvestmentPlans(payload),
   });
 }

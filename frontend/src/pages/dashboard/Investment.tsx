@@ -4,6 +4,7 @@ import useInvestmentFilterMethod from "../../hooks/methods/investmentFilter";
 export default function Investment() {
   const methods = useInvestmentFilterMethod();
   const { data } = useGetInvestmentPlans({ methods });
+  console.log();
 
   return (
     <main className="flex-1 bg-gray-200">
@@ -12,7 +13,21 @@ export default function Investment() {
 
         <div className="mt-4">
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 -mx-6">
-            <div className="w-full px-6 ">
+            {data?.data.map((plan) => (
+              <div key={Math.random()} className="w-full px-6 ">
+                <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                  <div className="p-3 bg-opacity-75 rounded-full">
+                    <img src={plan.image} width={50} alt="" />
+                  </div>
+
+                  <div className="mx-5">
+                    <h4 className="text-2xl font-semibold text-gray-700">{plan.interest_rate}%</h4>
+                    <div className="text-gray-500">{plan.plan}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {/* <div className="w-full px-6 ">
               <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
                 <div className="p-3 bg-opacity-75 rounded-full">
                   <img src="bitcoin-svgrepo-com.png" width={50} alt="" />
@@ -25,7 +40,7 @@ export default function Investment() {
               </div>
             </div>
 
-            <div className="w-full px-6 sm:mt-0">
+            <div className="w-full px-6">
               <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
                 <div className="p-3 bg-opacity-75 rounded-full">
                   <img src="eth-svgrepo-com.png" width={50} alt="" />
@@ -38,7 +53,7 @@ export default function Investment() {
               </div>
             </div>
 
-            <div className="w-full px-6 xl:mt-0">
+            <div className="w-full px-6">
               <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
                 <div className="p-3 bg-opacity-75 rounded-full">
                   <img
@@ -55,7 +70,7 @@ export default function Investment() {
                   <div className="text-gray-500">Tether</div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 

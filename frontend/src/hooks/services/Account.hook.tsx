@@ -96,7 +96,7 @@ export function useVerifyAccountService() {
   const token = searchParams.get("token");
   return useQuery({
     queryKey: ["verify", token],
-    queryFn: async () => ACCOUNT_API.verify({ token }),
+    queryFn: async () => await ACCOUNT_API.verify({ token }),
   });
 }
 
@@ -116,6 +116,7 @@ export function useProfileService() {
       try {
         const result = await ACCOUNT_API.profile();
         dispatch(updateAuth(result));
+        return result
       } catch (error: any) {
         if (error.statusCode == 401) {
           redirect();

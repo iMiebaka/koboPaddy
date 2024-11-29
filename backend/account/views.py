@@ -25,7 +25,7 @@ class ProfileAPIVIew(APIView):
     
 
     def get(self, request:Request, *args, **kwargs):
-        serializer = self.serializer_class(request.data)
+        serializer = self.serializer_class(request.user)
 
 
         data = dict()
