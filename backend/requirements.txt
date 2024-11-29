@@ -3,3 +3,5 @@ django-restframework
 djangorestframework-simplejwt
 python-dotenv
 psycopg2
+django-cors-headers
+pillow
