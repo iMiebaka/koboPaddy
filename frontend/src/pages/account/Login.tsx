@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import Input from "../../components/form/Input";
 import { useLoginService } from "../../hooks/services/Account.hook";
 import LoadingSpinner from "../../components/loader/Spiner";
+import Alert from "../../components/Alert";
 
 export default function Login() {
-  const { methods, onSubmit, loginHandlerMutant } = useLoginService();
-
+  const { methods, onSubmit, loginHandlerMutant, loginPrompt } =
+    useLoginService();
   return (
     <div className="py-6 ">
       <div className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
@@ -41,6 +42,15 @@ export default function Login() {
             fieldName="password"
             type="password"
           />
+          {loginPrompt.show && (
+            <div className="mt-8">
+              <Alert
+                body={loginPrompt.body}
+                header={loginPrompt.header}
+                status={loginPrompt.status}
+              />
+            </div>
+          )}
           <div className="mt-8">
             <button
               disabled={loginHandlerMutant.isPending}

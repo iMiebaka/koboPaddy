@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import Input from "../../components/form/Input";
 import { useRegisterService } from "../../hooks/services/Account.hook";
 import LoadingSpinner from "../../components/loader/Spiner";
+import Alert from "../../components/Alert";
 
 export default function Register() {
-  const { methods, onSubmit, registerHandlerMutant } = useRegisterService();
+  const { methods, onSubmit, registerHandlerMutant, registerPrompt } =
+    useRegisterService();
   return (
     <div className="py-6 ">
       <div className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
@@ -15,67 +17,82 @@ export default function Register() {
               "url('https://images.unsplash.com/photo-1546514714-df0ccc50d7bf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=667&q=80')",
           }}
         ></div>
-        <form
-          onSubmit={methods.handleSubmit(onSubmit)}
-          className="w-full p-8 lg:w-1/2"
-        >
+        <section className="w-full p-8 lg:w-1/2">
           <h2 className="text-2xl font-semibold text-gray-700 text-center">
             KoboPaddy
           </h2>
-          <p className="text-xl text-gray-600 text-center">Register!</p>
-          <Input<ITRegister>
-            methods={methods}
-            label="First name"
-            placeholder="First name"
-            required={true}
-            fieldName="first_name"
-            type="text"
-          />
-          <Input<ITRegister>
-            methods={methods}
-            label="Last Name"
-            placeholder="Last Name"
-            required={true}
-            fieldName="last_name"
-            type="text"
-          />
-          <Input<ITRegister>
-            methods={methods}
-            label="Email"
-            placeholder="Email"
-            required={true}
-            fieldName="email"
-            type="email"
-          />
-          <Input<ITRegister>
-            methods={methods}
-            label="Password"
-            placeholder="Password"
-            required={true}
-            fieldName="password"
-            type="password"
-          />
-          <div className="mt-8">
-            <button className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">
-              
-              {registerHandlerMutant.isPending ? (
-                <LoadingSpinner />
-              ) : (
-                <span>Signup</span>
+
+          {registerHandlerMutant.isSuccess ? (
+            <div className="text-center">
+              <h2 className="text-green-600">Sign up complete ✨</h2>
+              <p>A verification link has been sent to your email</p>
+            </div>
+          ) : (
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
+              <p className="text-xl text-gray-600 text-center">Register!</p>
+              <Input<ITRegister>
+                methods={methods}
+                label="First name"
+                placeholder="First name"
+                required={true}
+                fieldName="first_name"
+                type="text"
+              />
+              <Input<ITRegister>
+                methods={methods}
+                label="Last Name"
+                placeholder="Last Name"
+                required={true}
+                fieldName="last_name"
+                type="text"
+              />
+              <Input<ITRegister>
+                methods={methods}
+                label="Email"
+                placeholder="Email"
+                required={true}
+                fieldName="email"
+                type="email"
+              />
+              <Input<ITRegister>
+                methods={methods}
+                label="Password"
+                placeholder="Password"
+                required={true}
+                fieldName="password"
+                type="password"
+              />
+              {registerPrompt.show && (
+                <div className="mt-8">
+                  <Alert
+                    body={registerPrompt.body}
+                    header={registerPrompt.header}
+                    status={registerPrompt.status}
+                  />
+                </div>
               )}
-            </button>
-          </div>
-          <div className="mt-4 flex items-center justify-between">
-            <span className="border-b w-1/5 md:w-1/4"></span>
-            <Link
-              to="/account/login"
-              className="text-xs text-gray-500 uppercase"
-            >
-              or login
-            </Link>
-            <span className="border-b w-1/5 md:w-1/4"></span>
-          </div>
-        </form>
+              <div className="mt-8">
+                <button className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">
+                  {registerHandlerMutant.isPending ? (
+                    <LoadingSpinner />
+                  ) : (
+                    <span>Signup</span>
+                  )}
+                </button>
+              </div>
+              <div className="mt-4 flex items-center justify-between">
+                <span className="border-b w-1/5 md:w-1/4"></span>
+                <Link
+                  to="/account/login"
+                  className="text-xs text-gray-500 uppercase"
+                >
+                  or login
+                </Link>
+                <span className="border-b w-1/5 md:w-1/4"></span>
+              </div>
+            </form>
+          )}
+        </section>
       </div>
     </div>
   );

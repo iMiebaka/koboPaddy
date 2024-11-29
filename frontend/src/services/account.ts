@@ -28,7 +28,12 @@ const logOut = async (data: any) => {
 
 const register = async (data: ITRegister) => {
   try {
-    return await api<any>({ url: API_ROUTE.logout, data, method: "POST" });
+    return await api<any>({
+      url: API_ROUTE.register,
+      data,
+      secure: false,
+      method: "POST",
+    });
   } catch (err: any) {
     import.meta.env.DEV && console.error(err);
 
@@ -38,7 +43,12 @@ const register = async (data: ITRegister) => {
 
 const verify = async (data: any) => {
   try {
-    return await api<any>({ url: API_ROUTE.logout, data, method: "POST" });
+    return await api<any>({
+      url: API_ROUTE.verify,
+      data,
+      method: "POST",
+      secure: false,
+    });
   } catch (err: any) {
     import.meta.env.DEV && console.error(err);
 

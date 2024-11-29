@@ -5,9 +5,11 @@ import ACCOUNT_API from "../../services/account";
 import Cookies from "js-cookie";
 import { updateAuth } from "../../store/features/auth";
 import { useDispatch } from "react-redux";
+import useLoginPrompt from "../prompt/LoginPrompt";
 
 export function useRegisterService() {
   const methods = useForm<ITRegister>();
+  const registerPrompt = useLoginPrompt();
 
   const registerHandlerMutant = useMutation<any, any, ITRegister, any>({
     mutationFn: async (data: ITRegister) => {
@@ -15,6 +17,7 @@ export function useRegisterService() {
         const result = await ACCOUNT_API.register(data);
         return result;
       } catch (error) {
+        registerPrompt.setIsErrorPrompt(error);
         throw error;
       }
     },
@@ -25,23 +28,27 @@ export function useRegisterService() {
   };
   return {
     onSubmit,
-    registerHandlerMutant,
     methods,
+    registerPrompt,
+    registerHandlerMutant,
   };
 }
 
 export function useLoginService() {
   const methods = useForm<ITLogin>();
   const navigate = useNavigate();
+  const loginPrompt = useLoginPrompt();
 
   const loginHandlerMutant = useMutation<any, any, ITLogin, any>({
     mutationFn: async (data: ITLogin) => {
       try {
+        loginPrompt.resetPrompt()
         const result = await ACCOUNT_API.login(data);
         Cookies.set("access_token", result.access_token);
         navigate("/");
         return result;
       } catch (error) {
+        loginPrompt.setIsErrorPrompt(error);
         throw error;
       }
     },
@@ -55,6 +62,7 @@ export function useLoginService() {
     methods,
     onSubmit,
     loginHandlerMutant,
+    loginPrompt,
   };
 }
 
@@ -83,6 +91,7 @@ export function useLogoutService() {
 
 export function useVerifyAccountService() {
   const searchParams = useSearchParams()[0];
+  // const loginPrompt = useLoginPrompt();
 
   const token = searchParams.get("token");
   return useQuery({
@@ -108,8 +117,6 @@ export function useProfileService() {
         const result = await ACCOUNT_API.profile();
         dispatch(updateAuth(result));
       } catch (error: any) {
-        console.log(error);
-        
         if (error.statusCode == 401) {
           redirect();
         }
