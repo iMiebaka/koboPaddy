@@ -36,7 +36,7 @@ export default async function api<T>({
       if (!response.ok) {
         if (response.json) {
           const err = await response.json();
-
+          
           return reject({ ...err, statusCode: response.status });
         } else {
           reject({

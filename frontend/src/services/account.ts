@@ -46,12 +46,9 @@ const verify = async (data: any) => {
   }
 };
 
-const profile = async (id: string) => {
-  if (!id) {
-    throw new Error("Request not ready");
-  }
+const profile = async () => {
   try {
-    return await api<any>({ url: API_ROUTE.profile + id });
+    return await api<ITUser>({ url: API_ROUTE.profile });
   } catch (err: any) {
     import.meta.env.DEV && console.error(err);
 
@@ -64,7 +61,7 @@ const ACCOUNT_API = {
   logOut,
   profile,
   register,
-  verify
+  verify,
 };
 
 export default ACCOUNT_API;
