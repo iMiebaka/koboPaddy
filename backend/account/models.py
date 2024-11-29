@@ -57,3 +57,6 @@ class InvestorProfile(models.Model):
         on_delete=models.SET_NULL,
         related_name="investor_user",
     )
+    def __str__(self):
+        return f"investor | {self.user.full_name}"
+    

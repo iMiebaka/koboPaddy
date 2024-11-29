@@ -10,6 +10,9 @@ const API_ROUTE = {
 
     // investment
     investment: "/api/investment/plans",
+    ledger: "/api/investment/ledger",
+    wallet: "/api/investment/wallet",
+    withdraw: "/api/investment/withdraw",
 }
 
 export default API_ROUTE

@@ -47,23 +47,3 @@ export function loginErrorResponse(params: any) {
   }
   return response;
 }
-
-export function creatWalletErrorResponse(params: any): any {
-  const response = [];
-  if (params.phone) {
-    response.push(...params.phone);
-  }
-
-  if (params.bvn) {
-    response.push(...params.bvn);
-  }
-
-  if (params.email) {
-    response.push(...params.email);
-  }
-
-  if (params.detail) {
-    response.push(params.detail);
-  }
-  return response;
-}

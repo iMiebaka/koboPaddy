@@ -6,8 +6,6 @@ from account.choices import ACCOUNT_TYPE_CHOICES
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
-from account.tasks import send_verification_mail
-from threading import Thread
 
 User = get_user_model()
 
@@ -40,7 +38,6 @@ class LoginSerializer(serializers.Serializer):
                         raise serializers.ValidationError(msg)
                     return user
         except Exception as ex:
-            print(ex)
             pass
         msg = [_("Unable to log in with provided credentials.")]
         raise serializers.ValidationError(msg)
@@ -73,12 +70,9 @@ class RegisterSerializer(serializers.Serializer):
             )
         user.set_password(password)
         user.save()
-        self.send_verifcation(user)
         return user
 
-    def send_verifcation(self, user):
-        thread = Thread(target=send_verification_mail, args=(user.id,))
-        thread.start()
+    
 
 class EmailVerificationSerializer(serializers.Serializer):
     token = serializers.CharField(required=True)

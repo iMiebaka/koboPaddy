@@ -8,6 +8,8 @@ declare interface ITInvestmentPlan {
 declare interface ITInvestmentPlanRes {
   data: ITInvestmentPlan[];
 }
+
 declare interface ITWalletTx {
   amount: string;
 }
+

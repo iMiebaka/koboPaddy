@@ -47,6 +47,11 @@ class Wallet(models.Model):
         on_delete=models.SET_NULL,
         related_name="user_wallet",
     )
+    def __str__(self):
+        return f"wallet | {self.investor}"
+
+    def can_withdraw(self, amount):
+        return self.amount >= amount
 
 class Ledger(models.Model):
     amount = models.DecimalField(decimal_places=2, max_digits=50)
@@ -60,7 +65,7 @@ class Ledger(models.Model):
         default=APPROVAL_STATUS_CHOICES.PENDING,
         choices=APPROVAL_STATUS_CHOICES.choices
     )
-    investor = models.OneToOneField(
+    investor = models.ForeignKey(
         "account.InvestorProfile",
         null=True,
         blank=False,
@@ -69,3 +74,10 @@ class Ledger(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def credit_wallet(self, status):
+        wallet:Wallet = self.investor.user_wallet
+        wallet.amount += self.amount
+        self.status = status
+        self.save()
+        wallet.save()

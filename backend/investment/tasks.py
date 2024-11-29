@@ -15,19 +15,18 @@ def send_pending_withdrawal_mail(user_id: int) -> None:
     user = get_object_or_404(User, id=user_id)
     context = {
         "email": user.email,
-        "name": user.get_full_name
+        "name": user.full_name
     }
-    html = render_to_string("email/pending-withdrawal", context)
+    html = render_to_string("email/pending-withdrawal.html", context)
     MailClient.send_mail(_("Withdrawal Pending"), recipients=[user.email], html=html)
 
 
 def send_approved_withdrawal_mail(user_id: int) -> None:
     user = get_object_or_404(User, id=user_id)
 
-
     context = {
         "email": user.email,
-        "name": user.get_full_name
+        "name": user.full_name
     }
-    html = render_to_string("email/pending-withdrawal", context)
-    MailClient.send_mail(_("Withdrawal Pending"), recipients=[user.email], html=html)
+    html = render_to_string("email/notify-approval.html", context)
+    MailClient.send_mail(_("Withdrawal Approved"), recipients=[user.email], html=html)

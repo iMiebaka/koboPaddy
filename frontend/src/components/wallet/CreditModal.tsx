@@ -19,6 +19,7 @@ export default function CreditModal({
         </div>
         <h2 className="text-2xl">Credit Wallet</h2>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
+          
           <Input<ITWalletTx>
             fieldName="amount"
             methods={methods}
@@ -28,7 +29,7 @@ export default function CreditModal({
             className="bg-white"
           />
 
-          <div className="mt-8">
+          <div className="mt-4">
             <button
               disabled={creditHandlerMutant.isPending}
               className="bg-green-400 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"

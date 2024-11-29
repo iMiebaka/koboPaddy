@@ -41,12 +41,50 @@ const getInvestment = async (data: any) => {
   }
 };
 
+const getWallet = async () => {
+  try {
+    return await api<ITWalletTx>({
+      url: API_ROUTE.wallet,
+    });
+  } catch (err) {
+    import.meta.env.DEV && console.error(err);
+
+    throw err;
+  }
+};
+
+const getLedger = async (data: any) => {
+  try {
+    return await api<ITLedgerRes>({
+      url: API_ROUTE.ledger,
+    });
+  } catch (err) {
+    import.meta.env.DEV && console.error(err);
+
+    throw err;
+  }
+};
+
 const creditWallet = async (data: any) => {
   try {
     return await api<ITWalletTx>({
-      url: API_ROUTE.login,
+      url: API_ROUTE.wallet,
       data,
       method: "POST",
+    });
+  } catch (err) {
+    import.meta.env.DEV && console.error(err);
+
+    throw err;
+  }
+};
+
+const withdraw = async (data: any) => {
+  try {
+    return await api<ITWalletTx>({
+      url: API_ROUTE.wallet,
+      data,
+      method: "PUT",
     });
   } catch (err) {
     import.meta.env.DEV && console.error(err);
@@ -75,6 +113,9 @@ const INVESTMENT_API = {
   getInvestments,
   getInvestmentPlans,
   transferWallet,
+  getWallet,
+  withdraw,
+  getLedger,
 };
 
 export default INVESTMENT_API;

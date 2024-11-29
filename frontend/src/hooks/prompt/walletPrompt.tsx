@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { loginErrorResponse } from "../../utils/prompts/account";
+import { transferFundErrorResponse } from "../../utils/prompts/wallet";
 
-export default function useLoginPrompt() {
+export default function useTransferFundsPrompt() {
   const [promptMessage, setPromptMessage] = useState<ITAlertProps>({
     show: false,
     header: "",
@@ -28,7 +28,8 @@ export default function useLoginPrompt() {
   };
 
   const setIsErrorPrompt = (data: any) => {
-    const body = loginErrorResponse(data);
+    const body = transferFundErrorResponse(data)
+
     setPromptMessage({
       header: "Invalid Data",
       body,
