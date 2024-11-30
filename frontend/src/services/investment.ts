@@ -15,10 +15,8 @@ const getInvestmentPlans = async (data: any) => {
 
 const getInvestments = async (data: any) => {
   try {
-    return await api<ITInvestmentPlanRes>({
+    return await api<ITInvestmentRes>({
       url: API_ROUTE.subcriptions,
-      data,
-      method: "POST",
     });
   } catch (err) {
     import.meta.env.DEV && console.error(err);
@@ -27,12 +25,12 @@ const getInvestments = async (data: any) => {
   }
 };
 
-const getInvestment = async (data: any) => {
+const withdrawInvestment = async (data: any) => {
   try {
     return await api<any>({
-      url: API_ROUTE.login,
+      url: API_ROUTE.subcriptions,
       data,
-      method: "POST",
+      method: "PUT",
     });
   } catch (err) {
     import.meta.env.DEV && console.error(err);
@@ -109,7 +107,7 @@ const makeInvestment = async (data: any) => {
 
 const INVESTMENT_API = {
   creditWallet,
-  getInvestment,
+  withdrawInvestment,
   getInvestments,
   getInvestmentPlans,
   makeInvestment,

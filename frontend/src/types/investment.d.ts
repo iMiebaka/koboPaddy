@@ -20,3 +20,21 @@ declare interface ITMakeInvestmentTx {
   id?: number
   payload?: ITInvestmentPlan
 }
+
+declare interface ITWithdrawInvestmentTx {
+  amount: string;
+  id?: number
+}
+
+declare interface ITInvestment {
+  id: number;
+  plan: ITInvestmentPlan;
+  activated: boolean;
+  deposit: number;
+  closed_at: string;
+  revenue: number[];
+}
+
+declare interface ITInvestmentRes extends ITPaginationRequest {
+  data: ITInvestment[];
+}

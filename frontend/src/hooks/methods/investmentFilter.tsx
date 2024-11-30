@@ -9,8 +9,8 @@ export default function useInvestmentFilterMethod() {
         page: isNaN(searchParams.get("page") as any)
           ? Number(searchParams.get("page"))
           : 1,
-        limit: isNaN(searchParams.get("limit") as any)
-          ? Number(searchParams.get("limit"))
+        page_size: isNaN(searchParams.get("page_sizeu") as any)
+          ? Number(searchParams.get("page_sizeu"))
           : 20,
       },
     });

@@ -40,6 +40,9 @@ class Investment(models.Model):
     activated = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     closed_at = models.DateTimeField(null=True, blank=True)
+    
+    def can_withdraw(self, amount):
+        return self.amount >= amount
 
 
 class Wallet(models.Model):

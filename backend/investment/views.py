@@ -11,6 +11,7 @@ from investment.serializers import (
     LedgerSerializer,
     SubscribePlansSerializer,
     InvestmentPlansSerializer,
+    SubscribedPlanSerializer
 )
 from investment.models import InvestmentPlan, Ledger, Investment
 from generics.pagination import MyPagination
@@ -33,7 +34,7 @@ class InvestmentPlansAPIVIew(APIView, MyPagination):
 
 
 
-class SubscribeInvestmentAPIVIew(APIView):
+class SubscribeInvestmentAPIVIew(APIView, MyPagination):
     permission_classes = (IsInvestor,)
     serializer_class = SubscribePlansSerializer
 
@@ -52,11 +53,31 @@ class SubscribeInvestmentAPIVIew(APIView):
         data["data"] = None
         return Response(data, status=status.HTTP_201_CREATED)
     
+    @transaction.atomic    
+    def put(self, request:Request, *args, **kwargs):
+        queryset = Investment.objects.filter(
+            investor=request.user.investor_user,
+        )
+        serializer = self.serializer_class(
+            queryset.first(),
+            data=request.data, 
+            context={"request": request},
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        data = dict()
+        data["header"] = "success"
+        data["body"] = _("Withdrawal init"),
+        data["data"] = None
+        return Response(data, status=status.HTTP_200_OK)
+    
     def get(self, request:Request, *args, **kwargs):
         context = {"request": request}
         queryset = Investment.objects.filter(investor=request.user.investor_user)
         paginated_queryset = self.paginator.paginate_queryset(queryset, request)
-        serializer = self.serializer_class(paginated_queryset, context=context, many=True)
+        serializer = SubscribedPlanSerializer(paginated_queryset, context=context, many=True)
 
 
         data = dict()
@@ -93,15 +114,15 @@ class WalletAPIVIew(APIView):
     def post(self, request:Request, *args, **kwargs):
         """Credit wallet"""
         serializer = self.serializer_class(
-            data=request.data, 
+            data=request.data,
             context={"request": request}
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         data = dict()
-        data["status"] = "success"
-        data["message"] = _("Account Credited.")
+        data["header"] = "success"
+        data["body"] = _("Credit awaiting approval."),
         data["data"] = serializer.data
         return Response(data, status=status.HTTP_201_CREATED)
     

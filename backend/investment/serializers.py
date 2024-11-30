@@ -27,6 +27,15 @@ class InvestmentPlansSerializer(serializers.ModelSerializer):
         return response
 
 
+class SubscribedPlanSerializer(serializers.ModelSerializer):
+    plan = InvestmentPlansSerializer()
+    deposit = serializers.DecimalField(decimal_places=2, max_digits=50)
+
+    class Meta:
+        model = Investment
+        fields = "__all__"
+
+
 class SubscribePlansSerializer(serializers.ModelSerializer):
     amount = serializers.DecimalField(decimal_places=2, max_digits=50)
     id = serializers.IntegerField()
@@ -57,10 +66,23 @@ class SubscribePlansSerializer(serializers.ModelSerializer):
             revenue=(amount,)
         )
         investment.save()
-
         return investment
             
-
+    def update(self, instance: Investment, validated_data: dict):
+        investor = self.context["request"].user.investor_user
+        amount = validated_data["amount"]
+        
+        if not instance.can_withdraw(amount):
+            raise serializers.ValidationError({"amount": "Insufficient funds"})
+        
+        ledger = Ledger(
+            amount=amount,
+            investor=investor,
+            tx_type=LEDGER_CHOICES.WITHDRAWAL
+        )
+        ledger.save()
+        return instance
+    
 class WalletSerializer(serializers.ModelSerializer):
     amount = serializers.DecimalField(decimal_places=2, max_digits=50)
 
@@ -72,14 +94,14 @@ class WalletSerializer(serializers.ModelSerializer):
         amount = validated_data["amount"]
         request = self.context["request"]
         investor = request.user.investor_user
-        wallet = Wallet.objects.get(investor=investor)
-        wallet.amount += amount
-        wallet.save()
+        # wallet = Wallet.objects.get(investor=investor)
+        # wallet.amount += amount
+        # wallet.save()
         
         ledger = Ledger(
             amount=amount,
             investor=investor,
-            status=APPROVAL_STATUS_CHOICES.APPROVED
+            # status=APPROVAL_STATUS_CHOICES.APPROVED
         )
         ledger.save()
         return ledger

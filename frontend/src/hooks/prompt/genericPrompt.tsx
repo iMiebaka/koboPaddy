@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { investmentErrorResponse } from "../../utils/prompts/investment";
 
-export default function useMakeInvestPrompt() {
+export default function useGenericPrompt() {
   const [promptMessage, setPromptMessage] = useState<ITAlertProps>({
     show: false,
     header: "",
@@ -27,9 +26,7 @@ export default function useMakeInvestPrompt() {
     });
   };
 
-  const setIsErrorPrompt = (data: any) => {
-    const body = investmentErrorResponse(data)
-
+  const setIsErrorPrompt = (body: any) => {
     setPromptMessage({
       header: "Invalid Data",
       body,

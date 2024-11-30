@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import INVESTMENT_API from "../../services/investment";
 import { useForm, useWatch } from "react-hook-form";
 import useMakeInvestPrompt from "../prompt/investPrompt";
+import useGenericPrompt from "../prompt/genericPrompt";
+import { investmentErrorResponse } from "../../utils/prompts/investment";
 
 export function useGetInvestmentPlans({ methods }: ITInvestmentFilterMethod) {
   const payload = useWatch({
@@ -21,7 +23,7 @@ export function useGetInvestments({ methods }: ITInvestmentFilterMethod) {
 
   return useQuery({
     queryKey: ["investments", payload],
-    queryFn: async () => INVESTMENT_API.getInvestments(payload),
+    queryFn: async () => await INVESTMENT_API.getInvestments(payload),
   });
 }
 
@@ -31,19 +33,25 @@ export function useCreditService({
   toggleWalletModal: VoidFunction;
 }) {
   const methods = useForm<ITWalletTx>();
-  const queryClient = useQueryClient();
-
+  // const queryClient = useQueryClient();
+  const requestPrompt = useGenericPrompt();
   const creditHandlerMutant = useMutation<any, any, ITWalletTx, any>({
     mutationFn: async (data: ITWalletTx) => {
       try {
-        await INVESTMENT_API.creditWallet(data);
-        toggleWalletModal();
+        requestPrompt.resetPrompt();
+        const result = await INVESTMENT_API.creditWallet(data);
+        requestPrompt.setIsSuccessPrompt(result);
+        setTimeout(() => {
+          toggleWalletModal();
+        }, 2000);
       } catch (error) {
+        const data = investmentErrorResponse(error);
+        requestPrompt.setIsErrorPrompt(data);
         throw error;
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["wallet"] });
+      // queryClient.invalidateQueries({ queryKey: ["wallet"] });
     },
   });
 
@@ -54,6 +62,7 @@ export function useCreditService({
   return {
     methods,
     onSubmit,
+    requestPrompt,
     creditHandlerMutant,
   };
 }
@@ -100,5 +109,52 @@ export function useMakeInvestmentService({
     planSelected,
     requestPrompt,
     subscribeHandlerMutant,
+  };
+}
+
+export function useWithdrawInvestmentService() {
+  const requestPrompt = useMakeInvestPrompt();
+  const methods = useForm<ITWithdrawInvestmentTx>();
+
+  const withdrawHandlerMutant = useMutation<
+    any,
+    any,
+    ITWithdrawInvestmentTx,
+    any
+  >({
+    mutationFn: async (data: ITWithdrawInvestmentTx) => {
+      try {
+        requestPrompt.resetPrompt();
+        const result = await INVESTMENT_API.withdrawInvestment(data);
+        requestPrompt.setIsSuccessPrompt(result);
+        setTimeout(() => {
+          methods.reset();
+          requestPrompt.resetPrompt();
+        }, 2000);
+      } catch (error) {
+        requestPrompt.setIsErrorPrompt(error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ["wallet"] });
+    },
+  });
+
+  const onSubmit = async (data: ITWithdrawInvestmentTx) => {
+    await withdrawHandlerMutant.mutateAsync(data);
+  };
+
+  const planSelected = useWatch({
+    name: "id",
+    control: methods.control,
+  });
+
+  return {
+    methods,
+    onSubmit,
+    planSelected,
+    requestPrompt,
+    withdrawHandlerMutant,
   };
 }

@@ -1,4 +1,4 @@
-export function makeInvestmentErrorResponse(params: any): any {
+export function investmentErrorResponse(params: any): any {
   const response = [];
   if (params.details) {
     if (params.details.amount) response.push(params.details.amount);

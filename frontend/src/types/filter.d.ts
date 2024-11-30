@@ -1,5 +1,5 @@
 declare interface ITInvestmentFilterMethod {
-  methods: UseFormReturn<ITInvestmentPlan, any, undefined>;
+  methods: UseFormReturn<ITPaginationRequest, any, undefined>;
 }
 
 
