@@ -75,9 +75,24 @@ class Ledger(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"* {self.tx_type} - {self.status} | {self.amount}  | {self.investor}"
+
     def credit_wallet(self, status):
         wallet:Wallet = self.investor.user_wallet
         wallet.amount += self.amount
         self.status = status
-        self.save()
         wallet.save()
+
+
+    def debit_wallet(self, status):
+        wallet:Wallet = self.investor.user_wallet
+        print(wallet.amount)
+        wallet.amount -= self.amount
+        print(wallet.amount)
+        self.status = status
+        wallet.save()
+
+    class Meta:
+        ordering = ['-created_at']
+    
