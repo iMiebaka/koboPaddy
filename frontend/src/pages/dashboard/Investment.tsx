@@ -1,21 +1,23 @@
 import { useGetInvestmentPlans } from "../../hooks/services/Investment.hook";
 import useInvestmentFilterMethod from "../../hooks/methods/investmentFilter";
+import MakeInvestmentModal from "../../components/investment/MakeInvestmentModal";
+import { useForm } from "react-hook-form";
 
 export default function Investment() {
   const methods = useInvestmentFilterMethod();
   const { data } = useGetInvestmentPlans({ methods });
-  console.log();
+  const makeInvestmentMethods = useForm<ITMakeInvestmentTx>();
 
   return (
     <main className="flex-1 bg-gray-200">
       <div className="container px-6 py-8 mx-auto">
         <h3 className="text-3xl font-medium text-gray-700">Investment Plans</h3>
-
+        <MakeInvestmentModal methods={makeInvestmentMethods}  />
         <div className="mt-4">
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 -mx-6">
             {data?.data.map((plan) => (
               <div key={Math.random()} className="w-full px-6 ">
-                <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                <div onClick={() => makeInvestmentMethods.setValue("id", plan.id)} className="cursor-pointer flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
                   <div className="p-3 bg-opacity-75 rounded-full">
                     <img src={plan.image} width={50} alt="" />
                   </div>
@@ -27,50 +29,6 @@ export default function Investment() {
                 </div>
               </div>
             ))}
-            {/* <div className="w-full px-6 ">
-              <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
-                <div className="p-3 bg-opacity-75 rounded-full">
-                  <img src="bitcoin-svgrepo-com.png" width={50} alt="" />
-                </div>
-
-                <div className="mx-5">
-                  <h4 className="text-2xl font-semibold text-gray-700">2%</h4>
-                  <div className="text-gray-500">Bitcoin</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-full px-6">
-              <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
-                <div className="p-3 bg-opacity-75 rounded-full">
-                  <img src="eth-svgrepo-com.png" width={50} alt="" />
-                </div>
-
-                <div className="mx-5">
-                  <h4 className="text-2xl font-semibold text-gray-700">0.5%</h4>
-                  <div className="text-gray-500">Ethereum</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-full px-6">
-              <div className="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
-                <div className="p-3 bg-opacity-75 rounded-full">
-                  <img
-                    src="tether-crypto-cryptocurrency-svgrepo-com.png"
-                    width={50}
-                    alt=""
-                  />
-                </div>
-
-                <div className="mx-5">
-                  <h4 className="text-2xl font-semibold text-gray-700">
-                    0.3%
-                  </h4>
-                  <div className="text-gray-500">Tether</div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
 

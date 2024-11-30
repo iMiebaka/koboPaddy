@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from investment.choices import LEDGER_CHOICES, APPROVAL_STATUS_CHOICES
 from django.core.validators import FileExtensionValidator
+from django.contrib.postgres.fields import ArrayField
 
 ALLOWED_IMAGE_EXTS = ["png", "jpg", "jpeg", "webp"]
 
@@ -19,13 +20,16 @@ class InvestmentPlan(models.Model):
     def __str__(self):
         return f"{self.plan} at {self.interest_rate}"
 
-class Inventment(models.Model):
+class Investment(models.Model):
     plan = models.ForeignKey(
         InvestmentPlan, 
         on_delete=models.PROTECT, 
         related_name="subscribed_plan"
     )
-    amount = models.DecimalField(decimal_places=2, max_digits=50)
+    deposit = models.DecimalField(decimal_places=2, max_digits=50)
+    revenue = ArrayField(
+        models.DecimalField(decimal_places=2, max_digits=50)
+    )
     investor = models.ForeignKey(
         "account.InvestorProfile",
         null=True,

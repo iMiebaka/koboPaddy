@@ -6,13 +6,12 @@ declare interface ITInvestmentPlan {
   interest_rate: number;
 }
 
-declare interface ITLedgerRes {
-  page: number;
-  total_page: number;
+declare interface ITLedgerRes extends ITPaginationRequest {
   data: ITLedger[];
 }
+
 declare type ITTX_TYPE = "deposit" | "withdrawal";
-declare type ITLedgerStatus = "pending" | "approved" | "rejected"
+declare type ITLedgerStatus = "pending" | "approved" | "rejected";
 
 declare interface ITLedger {
   id: number;

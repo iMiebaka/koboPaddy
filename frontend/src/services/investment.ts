@@ -15,8 +15,8 @@ const getInvestmentPlans = async (data: any) => {
 
 const getInvestments = async (data: any) => {
   try {
-    return await api<any>({
-      url: API_ROUTE.login,
+    return await api<ITInvestmentPlanRes>({
+      url: API_ROUTE.subcriptions,
       data,
       method: "POST",
     });
@@ -93,10 +93,10 @@ const withdraw = async (data: any) => {
   }
 };
 
-const transferWallet = async (data: any) => {
+const makeInvestment = async (data: any) => {
   try {
     return await api<ITWalletTx>({
-      url: API_ROUTE.login,
+      url: API_ROUTE.subcriptions,
       data,
       method: "POST",
     });
@@ -112,7 +112,7 @@ const INVESTMENT_API = {
   getInvestment,
   getInvestments,
   getInvestmentPlans,
-  transferWallet,
+  makeInvestment,
   getWallet,
   withdraw,
   getLedger,

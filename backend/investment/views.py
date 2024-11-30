@@ -7,26 +7,27 @@ from rest_framework import status
 from django.db import transaction
 from account.permissions import IsInvestor
 from investment.serializers import (
-    InvestmentPlansSerializer,
     WalletSerializer,
-    LedgerSerializer
+    LedgerSerializer,
+    SubscribePlansSerializer,
+    InvestmentPlansSerializer,
 )
-from investment.models import InvestmentPlan, Wallet, Ledger
-from rest_framework.pagination import LimitOffsetPagination
-from generics.pagination import CustomPagination, MyPagination
+from investment.models import InvestmentPlan, Ledger, Investment
+from generics.pagination import MyPagination
 
-class InvestmentPlansAPIVIew(APIView):
+class InvestmentPlansAPIVIew(APIView, MyPagination):
     permission_classes = (IsInvestor,)
     serializer_class = InvestmentPlansSerializer
 
     def get(self, request:Request, *args, **kwargs):
         queryset = InvestmentPlan.objects.all()
         context = {"request": request}
-        serializer = self.serializer_class(queryset, context=context, many=True)
+        paginated_queryset = self.paginator.paginate_queryset(queryset, request)
+        serializer = self.serializer_class(paginated_queryset, context=context, many=True)
 
         data = dict()
-        data["status"] = "success"
-        data["message"] = _("Profile Retrieved.")
+        data["total_pages"] = self.total_pages
+        data["page"] = self.page.number
         data["data"] = serializer.data
         return Response(data, status=status.HTTP_200_OK)
 
@@ -34,15 +35,33 @@ class InvestmentPlansAPIVIew(APIView):
 
 class SubscribeInvestmentAPIVIew(APIView):
     permission_classes = (IsInvestor,)
-    serializer_class = InvestmentPlansSerializer
+    serializer_class = SubscribePlansSerializer
 
-    def get(self, request:Request, *args, **kwargs):
-        queryset = InvestmentPlan.objects.all()
-        serializer = self.serializer_class(queryset, many=True)
+    @transaction.atomic    
+    def post(self, request:Request, *args, **kwargs):
+        serializer = self.serializer_class(
+            data=request.data, 
+            context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
         data = dict()
-        data["status"] = "success"
-        data["message"] = _("Profile Retrieved.")
+        data["header"] = "success"
+        data["body"] = _("Investment started"),
+        data["data"] = None
+        return Response(data, status=status.HTTP_201_CREATED)
+    
+    def get(self, request:Request, *args, **kwargs):
+        context = {"request": request}
+        queryset = Investment.objects.filter(investor=request.user.investor_user)
+        paginated_queryset = self.paginator.paginate_queryset(queryset, request)
+        serializer = self.serializer_class(paginated_queryset, context=context, many=True)
+
+
+        data = dict()
+        data["total_pages"] = self.total_pages
+        data["page"] = self.page.number
         data["data"] = serializer.data
         return Response(data, status=status.HTTP_200_OK)
 
@@ -74,7 +93,6 @@ class WalletAPIVIew(APIView):
     def post(self, request:Request, *args, **kwargs):
         """Credit wallet"""
         serializer = self.serializer_class(
-
             data=request.data, 
             context={"request": request}
         )

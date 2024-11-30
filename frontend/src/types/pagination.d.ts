@@ -1,4 +1,5 @@
 declare interface ITPaginationRequest {
-  page: any;
-  limit: any;
+  page: number;
+  page_size: number;
+  total_page: number;
 }

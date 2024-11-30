@@ -882,6 +882,10 @@ video {
   animation: spin 1s linear infinite;
 }
 
+.cursor-pointer{
+  cursor: pointer;
+}
+
 .appearance-none{
   -webkit-appearance: none;
      -moz-appearance: none;
