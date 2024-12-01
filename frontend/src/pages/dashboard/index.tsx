@@ -7,9 +7,9 @@ import { useProfileService } from "../../hooks/services/Account.hook";
 import LoadingPage from "../../components/loader/LoadingPage";
 
 export default function Dashboard() {
-  const { isPending } = useProfileService();
+  const { isSuccess } = useProfileService();
 
-  if (isPending) return <LoadingPage />;
+  if (!isSuccess) return <LoadingPage />;
 
   return (
     <Routes>
