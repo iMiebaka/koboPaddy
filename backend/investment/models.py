@@ -11,11 +11,9 @@ class InvestmentPlan(models.Model):
     active = models.BooleanField(default=True)
     min_investment = models.DecimalField(decimal_places=2, max_digits=50)
     interest_rate = models.FloatField()
-    image = models.ImageField(
+    image = models.URLField(
         null=True,
-        blank=True,
-        upload_to="plans",
-        validators=[FileExtensionValidator(ALLOWED_IMAGE_EXTS)],
+        blank=True
     )
     def __str__(self):
         return f"{self.plan} at {self.interest_rate}"
@@ -94,9 +92,7 @@ class Ledger(models.Model):
 
     def debit_wallet(self, status):
         wallet:Wallet = self.investor.user_wallet
-        print(wallet.amount)
         wallet.amount -= self.amount
-        print(wallet.amount)
         self.status = status
         wallet.save()
 

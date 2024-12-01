@@ -20,11 +20,11 @@ class InvestmentPlansSerializer(serializers.ModelSerializer):
         model = InvestmentPlan
         fields = '__all__'
 
-    def to_representation(self, instance: Investment) -> dict:
-        request = self.context["request"]
-        response = super().to_representation(instance)
-        response["image"] = f"{request.build_absolute_uri('/')[:-1].strip()}/media/{instance.image}"
-        return response
+    # def to_representation(self, instance: Investment) -> dict:
+    #     request = self.context["request"]
+    #     response = super().to_representation(instance)
+    #     response["image"] = f"{request.build_absolute_uri('/')[:-1].strip()}/media/{instance.image}"
+    #     return response
 
 
 class SubscribedPlanSerializer(serializers.ModelSerializer):

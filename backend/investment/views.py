@@ -13,7 +13,11 @@ from investment.serializers import (
     InvestmentPlansSerializer,
     SubscribedPlanSerializer
 )
-from investment.models import InvestmentPlan, Ledger, Investment
+from investment.models import (
+    InvestmentPlan, Ledger, 
+    Investment, LEDGER_CHOICES,
+    APPROVAL_STATUS_CHOICES
+)
 from generics.pagination import MyPagination
 
 class InvestmentPlansAPIVIew(APIView, MyPagination):
@@ -147,3 +151,33 @@ class LedgerAPIVIew(APIView, MyPagination):
         data["page"] = self.page.number
         data["data"] = serializer.data
         return Response(data, status=status.HTTP_200_OK)
+
+from django.db.models import Sum
+
+class DashboardAPIVIew(APIView):
+    permission_classes = (IsInvestor,)
+    
+    def get(self, request:Request, *args, **kwargs):
+
+        investments = Investment.objects.filter(investor=request.user.investor_user)
+        completed_transactions = Ledger.objects.filter(
+            investor=request.user.investor_user,
+            status=APPROVAL_STATUS_CHOICES.APPROVED
+        )
+
+        # investments
+        total_investments_amount = investments.aggregate(total=Sum('deposit'))['total']
+        # Withdrawal
+        total_withdrawal = completed_transactions.filter(
+            tx_type=LEDGER_CHOICES.WITHDRAWAL).aggregate(total=Sum('amount'))['total']
+        
+        total_deposit = completed_transactions.filter(
+            tx_type=LEDGER_CHOICES.DEPOSIT).aggregate(total=Sum('amount'))['total']
+        
+        data = {
+            "total_investments_amount": total_investments_amount or 0,
+            "total_withdrawal": total_withdrawal or 0,
+            "total_deposit": total_deposit or 0
+        }
+        return Response(data, status=status.HTTP_200_OK)
+           
