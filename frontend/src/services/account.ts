@@ -58,7 +58,7 @@ const verify = async (data: any) => {
 
 const profile = async () => {
   try {
-    return await api<ITUser>({ url: API_ROUTE.profile });
+    return await api<{data: ITUser}>({ url: API_ROUTE.profile });
   } catch (err: any) {
     import.meta.env.DEV && console.error(err);
 

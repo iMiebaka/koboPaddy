@@ -58,5 +58,5 @@ class InvestorProfile(models.Model):
         related_name="investor_user",
     )
     def __str__(self):
-        return f"investor | {self.user.full_name}"
+        return f"{self.user}"
     

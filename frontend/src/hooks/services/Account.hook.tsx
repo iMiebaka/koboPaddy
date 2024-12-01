@@ -115,7 +115,7 @@ export function useProfileService() {
     queryFn: async () => {
       try {
         const result = await ACCOUNT_API.profile();
-        dispatch(updateAuth(result));
+        dispatch(updateAuth(result.data));
         return result
       } catch (error: any) {
         if (error.statusCode == 401 || !Cookies.get("access_token")) {

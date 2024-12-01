@@ -10,11 +10,11 @@ export default function DepositCard({className}:{className?:string}) {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       fill="#000000"
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g
         id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
         {" "}
@@ -29,10 +29,10 @@ export default function DepositCard({className}:{className?:string}) {
             id="linearGradient-1"
           >
             {" "}
-            <stop stop-color="#EDEEF4" offset="0%">
+            <stop stopColor="#EDEEF4" offset="0%">
               {" "}
             </stop>{" "}
-            <stop stop-color="#D7D8E6" offset="100%">
+            <stop stopColor="#D7D8E6" offset="100%">
               {" "}
             </stop>{" "}
           </linearGradient>{" "}
@@ -44,10 +44,10 @@ export default function DepositCard({className}:{className?:string}) {
             id="linearGradient-2"
           >
             {" "}
-            <stop stop-color="#C3C4D4" offset="0%">
+            <stop stopColor="#C3C4D4" offset="0%">
               {" "}
             </stop>{" "}
-            <stop stop-color="#AEAFC8" offset="100%">
+            <stop stopColor="#AEAFC8" offset="100%">
               {" "}
             </stop>{" "}
           </linearGradient>{" "}
@@ -59,10 +59,10 @@ export default function DepositCard({className}:{className?:string}) {
             id="linearGradient-3"
           >
             {" "}
-            <stop stop-color="#1DD47F" offset="0%">
+            <stop stopColor="#1DD47F" offset="0%">
               {" "}
             </stop>{" "}
-            <stop stop-color="#0DA949" offset="100%">
+            <stop stopColor="#0DA949" offset="100%">
               {" "}
             </stop>{" "}
           </linearGradient>{" "}
@@ -74,10 +74,10 @@ export default function DepositCard({className}:{className?:string}) {
             id="linearGradient-4"
           >
             {" "}
-            <stop stop-color="#7AA0FA" offset="0%">
+            <stop stopColor="#7AA0FA" offset="0%">
               {" "}
             </stop>{" "}
-            <stop stop-color="#4466F3" offset="100%">
+            <stop stopColor="#4466F3" offset="100%">
               {" "}
             </stop>{" "}
           </linearGradient>{" "}
@@ -89,10 +89,10 @@ export default function DepositCard({className}:{className?:string}) {
             id="linearGradient-5"
           >
             {" "}
-            <stop stop-color="#2F6DC8" offset="0%">
+            <stop stopColor="#2F6DC8" offset="0%">
               {" "}
             </stop>{" "}
-            <stop stop-color="#153B97" offset="100%">
+            <stop stopColor="#153B97" offset="100%">
               {" "}
             </stop>{" "}
           </linearGradient>{" "}
@@ -100,15 +100,15 @@ export default function DepositCard({className}:{className?:string}) {
         <g
           id="icons"
           stroke="none"
-          stroke-width="1"
+          strokeWidth="1"
           fill="none"
-          fill-rule="evenodd"
+          fillRule="evenodd"
         >
           {" "}
           <g
             id="ui-gambling-website-lined-icnos-casinoshunter"
             transform="translate(-2029.000000, -2039.000000)"
-            fill-rule="nonzero"
+            fillRule="nonzero"
           >
             {" "}
             <g id="4" transform="translate(50.000000, 1871.000000)">

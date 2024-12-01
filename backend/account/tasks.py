@@ -7,14 +7,16 @@ from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from generics.helpers.mail_client import MailClient
-
+from time import sleep
 User = get_user_model()
 
 
 def send_verification_mail(user_id: int) -> None:
+
     if os.environ.get("ENV") == "test":
         return
 
+    sleep(2)
     user = get_object_or_404(User, id=user_id)
 
     created = timezone.now()

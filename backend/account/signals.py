@@ -8,15 +8,11 @@ from threading import Thread
 
 @receiver(post_save, sender=User)
 def verify_user(sender, instance=None, created=False, **kwargs):
+    print(instance.id)
     if instance and created and instance.is_investor:
         thread = Thread(target=send_verification_mail, args=(instance.id,))
         thread.daemon = True
         thread.start()
 
-@receiver(post_save, sender=User)
-def create_wallet(sender, instance=None, created=False, **kwargs):
-    # This signal creates wallet for investor
-
-    if instance and created:
         investor = InvestorProfile.objects.create(user=instance)
         Wallet.objects.create(investor=investor)

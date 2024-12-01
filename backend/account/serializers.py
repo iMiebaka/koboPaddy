@@ -59,15 +59,13 @@ class RegisterSerializer(serializers.Serializer):
     def create(self, validated_data):
         password = validated_data.pop("password")
         user = User.objects.filter(email__iexact=validated_data["email"], is_verified=False).first()
-        if user:
-            user.first_name = validated_data["first_name"]
-            user.last_name = validated_data["last_name"]
-        else:
-            user = User(
-                is_active=False,
-                **validated_data,
-                account_type=ACCOUNT_TYPE_CHOICES.INVESTOR,
-            )
+        user.delete()
+
+        user = User(
+            is_active=False,
+            **validated_data,
+            account_type=ACCOUNT_TYPE_CHOICES.INVESTOR,
+        )
         user.set_password(password)
         user.save()
         return user
