@@ -14,6 +14,7 @@ const API_ROUTE = {
     investment: "/api/investment/plans",
     withdraw: "/api/investment/withdraw",
     subcriptions: "/api/investment/subcriptions",
+    dashboard: "/api/investment/dashboard",
 
 }
 

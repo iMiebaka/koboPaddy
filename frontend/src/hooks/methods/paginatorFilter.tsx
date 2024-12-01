@@ -9,7 +9,7 @@ export default function usePaginatorFilterMethod() {
         page: isNaN(searchParams.get("page") as any)
           ? Number(searchParams.get("page"))
           : 1,
-        limit: isNaN(searchParams.get("limit") as any)
+        page_size: isNaN(searchParams.get("limit") as any)
           ? Number(searchParams.get("limit"))
           : 20,
       },

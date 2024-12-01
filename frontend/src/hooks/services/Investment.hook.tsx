@@ -1,9 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery} from "@tanstack/react-query";
 import INVESTMENT_API from "../../services/investment";
 import { useForm, useWatch } from "react-hook-form";
 import useMakeInvestPrompt from "../prompt/investPrompt";
-import useGenericPrompt from "../prompt/genericPrompt";
-import { investmentErrorResponse } from "../../utils/prompts/investment";
 
 export function useGetInvestmentPlans({ methods }: ITInvestmentFilterMethod) {
   const payload = useWatch({
@@ -27,45 +25,15 @@ export function useGetInvestments({ methods }: ITInvestmentFilterMethod) {
   });
 }
 
-export function useCreditService({
-  toggleWalletModal,
-}: {
-  toggleWalletModal: VoidFunction;
-}) {
-  const methods = useForm<ITWalletTx>();
-  // const queryClient = useQueryClient();
-  const requestPrompt = useGenericPrompt();
-  const creditHandlerMutant = useMutation<any, any, ITWalletTx, any>({
-    mutationFn: async (data: ITWalletTx) => {
-      try {
-        requestPrompt.resetPrompt();
-        const result = await INVESTMENT_API.creditWallet(data);
-        requestPrompt.setIsSuccessPrompt(result);
-        setTimeout(() => {
-          toggleWalletModal();
-        }, 2000);
-      } catch (error) {
-        const data = investmentErrorResponse(error);
-        requestPrompt.setIsErrorPrompt(data);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["wallet"] });
-    },
+
+export function useDashboard() {
+
+  return useQuery({
+    queryKey: ["dashboard"],
+    queryFn:INVESTMENT_API.getDashboard
   });
-
-  const onSubmit = async (data: ITWalletTx) => {
-    await creditHandlerMutant.mutateAsync(data);
-  };
-
-  return {
-    methods,
-    onSubmit,
-    requestPrompt,
-    creditHandlerMutant,
-  };
 }
+
 
 export function useMakeInvestmentService({
   methods,

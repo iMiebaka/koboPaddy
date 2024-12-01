@@ -1,10 +1,12 @@
 import { Outlet } from "react-router-dom";
 import { toggleSidebar } from "../../utils/compModifier";
 import Nav from "./Nav";
+import SocketNotificationHook from "../../hooks/services/SocketNotification.hook";
 
 export default function Mainlayout() {
   return (
     <div>
+      <SocketNotificationHook />
       <div className="flex bg-gray-200">
         <Nav />
         <div className="flex flex-col flex-1 overflow-hidden z-10">

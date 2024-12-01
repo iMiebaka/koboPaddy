@@ -1,5 +1,5 @@
 import CloseIcon from "../../assets/icons/close.icon";
-import { useCreditService } from "../../hooks/services/Investment.hook";
+import { useCreditService } from "../../hooks/services/Wallet.hook";
 import Alert from "../Alert";
 import Input from "../form/Input";
 import LoadingSpinner from "../loader/Spiner";

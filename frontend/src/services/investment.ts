@@ -25,6 +25,19 @@ const getInvestments = async (data: any) => {
   }
 };
 
+
+const getDashboard = async () => {
+  try {
+    return await api<ITDashboard>({
+      url: API_ROUTE.dashboard,
+    });
+  } catch (err) {
+    import.meta.env.DEV && console.error(err);
+
+    throw err;
+  }
+};
+
 const withdrawInvestment = async (data: any) => {
   try {
     return await api<any>({
@@ -111,6 +124,7 @@ const INVESTMENT_API = {
   getInvestments,
   getInvestmentPlans,
   makeInvestment,
+  getDashboard,
   getWallet,
   withdraw,
   getLedger,

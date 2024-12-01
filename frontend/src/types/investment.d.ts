@@ -38,3 +38,9 @@ declare interface ITInvestment {
 declare interface ITInvestmentRes extends ITPaginationRequest {
   data: ITInvestment[];
 }
+
+declare interface ITDashboard {
+  total_investments_amount: number;
+  total_withdrawal: number;
+  total_deposit: number;
+}
