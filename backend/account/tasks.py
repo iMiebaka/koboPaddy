@@ -12,6 +12,9 @@ User = get_user_model()
 
 
 def send_verification_mail(user_id: int) -> None:
+    if os.environ.get("ENV") == "test":
+        return
+
     user = get_object_or_404(User, id=user_id)
 
     created = timezone.now()

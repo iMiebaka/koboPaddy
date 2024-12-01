@@ -114,13 +114,13 @@ WSGI_APPLICATION = 'kobopaddy.wsgi.application'
 
 DATABASES = {
     "default": {
-        "NAME": os.getenv("DATABASE_NAME"),
-        "USER": os.getenv("DATABASE_USER"),
-        "HOST": os.getenv("DATABASE_HOST"),
-        "PORT": os.getenv("DATABASE_PORT"),
-        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+        "NAME": os.getenv("POSTGRES_NAME"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "PORT": os.getenv("POSTGRES_PORT"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "TEST": {"NAME": f"test_{os.getenv('DATABASE_NAME')}"},
+        # "TEST": {"NAME": f"test_{os.getenv('POSTGRES_NAME')}"},
     }
 }
 

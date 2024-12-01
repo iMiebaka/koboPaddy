@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
@@ -8,6 +9,9 @@ User = get_user_model()
 
 
 def send_transaction_pending_mail(user_id: int, tx_type) -> None:
+    if os.environ.get("ENV") == "test":
+        return
+    
     user = get_object_or_404(User, id=user_id)
     context = {
         "email": user.email,
@@ -19,6 +23,9 @@ def send_transaction_pending_mail(user_id: int, tx_type) -> None:
 
 
 def send_approved_withdrawal_mail(user_id: int, amount: float) -> None:
+    if os.environ.get("ENV") == "test":
+        return
+    
     user = get_object_or_404(User, id=user_id)
 
     context = {
@@ -31,6 +38,9 @@ def send_approved_withdrawal_mail(user_id: int, amount: float) -> None:
 
 
 def send_rejection_withdrawal_mail(user_id: int, amount: float) -> None:
+    if os.environ.get("ENV") == "test":
+        return
+    
     user = get_object_or_404(User, id=user_id)
 
     context = {
@@ -43,6 +53,9 @@ def send_rejection_withdrawal_mail(user_id: int, amount: float) -> None:
 
 
 def send_approved_credit_mail(user_id: int, amount: float) -> None:
+    if os.environ.get("ENV") == "test":
+        return
+    
     user = get_object_or_404(User, id=user_id)
 
     context = {
@@ -55,6 +68,8 @@ def send_approved_credit_mail(user_id: int, amount: float) -> None:
 
 
 def send_rejection_credit_mail(user_id: int, amount: float) -> None:
+    if os.environ.get("ENV") == "test":
+        return
     user = get_object_or_404(User, id=user_id)
 
     context = {

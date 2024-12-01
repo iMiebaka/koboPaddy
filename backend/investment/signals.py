@@ -1,4 +1,5 @@
 from django.db.models.signals import pre_save
+from django.db import transaction
 from django.dispatch import receiver
 from investment.models import Ledger
 from investment.tasks import (
@@ -26,11 +27,15 @@ def manage_wallet_notification(sender, instance=None, created=False, **kwargs):
             ledger = Ledger.objects.filter(id=instance.id).first()
             # Credit wallet of investor
             if ledger.status == APPROVAL_STATUS_CHOICES.PENDING and instance.status == APPROVAL_STATUS_CHOICES.APPROVED:
-                ledger.credit_wallet(APPROVAL_STATUS_CHOICES.APPROVED)
-                thread = Thread(target=send_approved_credit_mail, args=(instance.investor.user.id, ledger.amount))
-                thread.start()
+                with transaction.atomic():
+                    ledger.credit_wallet(APPROVAL_STATUS_CHOICES.APPROVED)
+                    thread = Thread(target=send_approved_credit_mail, args=(instance.investor.user.id, ledger.amount))
+                    thread.daemon = True
+                    thread.start()
+                    
             elif ledger.status == APPROVAL_STATUS_CHOICES.PENDING and instance.status == APPROVAL_STATUS_CHOICES.REJECTED:
                 thread = Thread(target=send_rejection_credit_mail, args=(instance.investor.user.id, ledger.amount))
+                thread.daemon = True
                 thread.start()
 
             elif ledger.status == APPROVAL_STATUS_CHOICES.APPROVED and instance.status == APPROVAL_STATUS_CHOICES.REJECTED:
@@ -42,12 +47,15 @@ def manage_wallet_notification(sender, instance=None, created=False, **kwargs):
             
             # Debit wallet of investor
             if ledger.status == APPROVAL_STATUS_CHOICES.PENDING and instance.status == APPROVAL_STATUS_CHOICES.APPROVED:
-                ledger.debit_wallet(APPROVAL_STATUS_CHOICES.APPROVED)
-                thread = Thread(target=send_approved_withdrawal_mail, args=(instance.investor.user.id, ledger.amount))
-                thread.start()
+                with transaction.atomic():
+                    ledger.debit_wallet(APPROVAL_STATUS_CHOICES.APPROVED)
+                    thread = Thread(target=send_approved_withdrawal_mail, args=(instance.investor.user.id, ledger.amount))
+                    thread.daemon = True
+                    thread.start()
                 
             if ledger.status == APPROVAL_STATUS_CHOICES.PENDING and instance.status == APPROVAL_STATUS_CHOICES.REJECTED:
                 thread = Thread(target=send_rejection_withdrawal_mail, args=(instance.investor.user.id, ledger.amount))
+                thread.daemon = True
                 thread.start()
                 
             if ledger.status == APPROVAL_STATUS_CHOICES.APPROVED and instance.status == APPROVAL_STATUS_CHOICES.REJECTED:
