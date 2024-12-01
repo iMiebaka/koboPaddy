@@ -5,6 +5,7 @@ import Wallet from "./Wallet";
 import Investment from "./Investment";
 import { useProfileService } from "../../hooks/services/Account.hook";
 import LoadingPage from "../../components/loader/LoadingPage";
+import NotFound from "../NotFound";
 
 export default function Dashboard() {
   const { isSuccess } = useProfileService();
@@ -18,6 +19,7 @@ export default function Dashboard() {
         <Route path="wallet" element={<Wallet />} />
         <Route path="investment" element={<Investment />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
