@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: ITUser = {
   id: "",
-  fullName: "",
+  full_name: "",
   first_name: "",
   last_name: "",
   email: ""
