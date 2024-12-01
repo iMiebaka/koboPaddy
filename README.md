@@ -1,7 +1,7 @@
 # KoboPaddy
  Welcome to the KoboPaddy. An investment platform to next level investor
  
-[![Banner](banner.png)](https://www.youtube.com/@ryanburgess)
+[![Banner](dashboard.png)](https://kobopaddy.onrender.com)
  
 
 
