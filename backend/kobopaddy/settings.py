@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'na-only-you-waka-come')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv("DEBUG", "True"))
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOST").split(",")
 
@@ -116,7 +116,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-print(os.getenv("REDIS_URL"))
 
 ASGI_APPLICATION = "kobopaddy.asgi.application"
 WSGI_APPLICATION = 'kobopaddy.wsgi.application'
