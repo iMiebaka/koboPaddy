@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'na-only-you-waka-come')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOST").split(",")
 
 
 # Application definition
