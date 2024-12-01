@@ -1,0 +1,116 @@
+services:
+    # kobopaddy-frontend:
+    #     build:
+    #         context: ./frontend
+    #         dockerfile: Dockerfile
+    #         container_name: kobopaddy-web
+    #     ports:
+    #         - "5173:80"
+
+    kobopaddy-api:
+        container_name: api
+        restart: always
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        command: python3 manage.py runserver 0.0.0.0:8000
+        image: api:latest
+        networks:
+            - KOBOPADDY_NETWORK
+        depends_on:
+            - kobopaddy-postgresql
+            - kobopaddy-redis
+        volumes:
+            - .:/app
+            # - kobopaddy_mediadata:/app/mediafiles
+            # - kobopaddy_staticdata:/app/staticfiles
+        ports:
+            - 8000:8000
+        env_file:
+            - ./.env
+
+    kobopaddy-postgresql:
+        container_name: postgresql
+        restart: always
+        image: postgres:15
+        networks:
+            - KOBOPADDY_NETWORK
+        volumes:
+            - kobopaddy_postgresdata:/var/lib/postgresql/data/
+        # environment:
+        #     - name=value
+        ports:
+            - 5431:5432
+        env_file:
+            - ./.env
+
+    kobopaddy-postgresql-admin:
+        container_name: postgresql-admin
+        restart: always
+        image: dpage/pgadmin4:latest
+        networks:
+            - KOBOPADDY_NETWORK
+        depends_on:
+            - kobopaddy-postgresql
+        ports:
+            - 5050:80
+        env_file:
+            - ./.env
+
+
+    kobopaddy-redis:
+        container_name: redis
+        restart: always
+        image: redis:latest
+        networks:
+            - KOBOPADDY_NETWORK
+        volumes:
+            - kobopaddy_redisdata:/var/lib/redis/data/
+        ports:
+            - 6370:6379
+        env_file:
+            - ./.env
+
+    # celery-worker:
+    #     container_name: celery-worker
+    #     restart: always
+    #     build:
+    #         context: ./
+    #         dockerfile: Dockerfile
+    #     command: celery -A kobopaddy worker -l info
+    #     image: celery-worker:latest
+    #     networks:
+    #         - KOBOPADDY_NETWORK
+    #     depends_on:
+    #         - redis
+    #     volumes:
+    #         - .:/app
+    #     env_file:
+    #         - ./.env
+
+    # celery-beat:
+    #     container_name: celery-beat
+    #     restart: always
+    #     build:
+    #         context: ./
+    #         dockerfile: Dockerfile
+    #     command: celery -A kobopaddy beat -l info
+    #     image: celery-beat:latest
+    #     networks:
+    #         - KOBOPADDY_NETWORK
+    #     depends_on:
+    #         - redis
+    #     volumes:
+    #         - .:/app
+    #     env_file:
+            # - ./.env
+
+volumes:
+    kobopaddy_postgresdata:
+    kobopaddy_redisdata:
+    # kobopaddy_mediadata:
+    # kobopaddy_staticdata:
+
+networks:
+    KOBOPADDY_NETWORK:
+        driver: bridge
