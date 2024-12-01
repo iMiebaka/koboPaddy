@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -106,6 +107,18 @@ TEMPLATES = [
     },
 ]
 
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.getenv("REDIS_URL")], 
+        },
+    },
+}
+print(os.getenv("REDIS_URL"))
+
+ASGI_APPLICATION = "kobopaddy.asgi.application"
 WSGI_APPLICATION = 'kobopaddy.wsgi.application'
 
 
@@ -119,8 +132,7 @@ DATABASES = {
         "HOST": os.getenv("POSTGRES_HOST"),
         "PORT": os.getenv("POSTGRES_PORT"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        # "TEST": {"NAME": f"test_{os.getenv('POSTGRES_NAME')}"},
+        "ENGINE": "django.db.backends.postgresql",
     }
 }
 
@@ -174,7 +186,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
