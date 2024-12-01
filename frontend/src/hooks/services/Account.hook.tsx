@@ -118,7 +118,7 @@ export function useProfileService() {
         dispatch(updateAuth(result));
         return result
       } catch (error: any) {
-        if (error.statusCode == 401) {
+        if (error.statusCode == 401 || !Cookies.get("access_token")) {
           redirect();
         }
         throw error;
