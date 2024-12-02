@@ -153,7 +153,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-if not DEBUG:
+if config("LIVE", default=False):
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
