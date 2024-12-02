@@ -59,7 +59,8 @@ class RegisterSerializer(serializers.Serializer):
     def create(self, validated_data):
         password = validated_data.pop("password")
         user = User.objects.filter(email__iexact=validated_data["email"], is_verified=False).first()
-        user.delete()
+        if user:
+            user.delete()
 
         user = User(
             is_active=False,

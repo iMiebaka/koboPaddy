@@ -8,6 +8,8 @@ from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from generics.helpers.mail_client import MailClient
 from time import sleep
+
+
 User = get_user_model()
 
 

@@ -98,11 +98,19 @@ class UserTest(APITestCase):
         # Enable azaman vibe
         response = client.post("/api/investment/wallet", data={"amount": 1000000}, format="json")
         self.assertEqual(response.json()["header"], "success")
+        response = client.get("/api/investment/wallet")
+
         # Accept cos they have no choice
         ledger = Ledger.objects.filter(status=APPROVAL_STATUS_CHOICES.PENDING).first()
         ledger.status = APPROVAL_STATUS_CHOICES.APPROVED
         ledger.save()
+        
+        response = client.get("/api/investment/wallet")
+        balance = float(response.json()["amount"])
 
         data = {"id": investment_one.pk, "amount": 100000}
         response = client.post("/api/investment/subcriptions", data=data, format="json")
         self.assertEqual(response.json()["header"], "success")
+
+        response = client.get("/api/investment/wallet")
+        self.assertEqual(response.json()["amount"], f'{balance - data["amount"]}0')

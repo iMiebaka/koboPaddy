@@ -13,9 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
-from dotenv import load_dotenv
+from decouple import config
 
-load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,11 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'na-only-you-waka-come')
+SECRET_KEY = config('SECRET_KEY', 'na-only-you-waka-come')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.getenv("DEBUG", 1))
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOST").split(",")
+DEBUG = config("DEBUG", default=1, cast=bool)
+ALLOWED_HOSTS = config("ALLOWED_HOST", cast=lambda x: [y.strip() for y in x.split(",")])
 
 
 # Application definition
@@ -63,12 +62,12 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=int(os.getenv("ACCESS_TOKEN_LIFETIME", 1))),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=int(os.getenv("REFRESH_TOKEN_LIFETIME", 24))),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=int(config("ACCESS_TOKEN_LIFETIME", default=1))),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=int(config("REFRESH_TOKEN_LIFETIME", default=24))),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': os.getenv('JWT_SIGNING_KEY', 'na-only-you-waka-come'),
+    'SIGNING_KEY': config('JWT_SIGNING_KEY', 'na-only-you-waka-come'),
 }
 
 AUTH_USER_MODEL = "account.User"
@@ -86,8 +85,8 @@ MIDDLEWARE = [
 
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS").split(",")
-CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS").split(",")
+CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", cast=lambda x: [y.strip() for y in x.split(",")])
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=lambda x: [y.strip() for y in x.split(",")])
 ROOT_URLCONF = 'kobopaddy.urls'
 
 TEMPLATES = [
@@ -111,10 +110,11 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.getenv("REDIS_URL")], 
+            "hosts": [config("REDIS_URL")], 
         },
     },
 }
+print(config("REDIS_URL"))
 
 ASGI_APPLICATION = "kobopaddy.asgi.application"
 WSGI_APPLICATION = 'kobopaddy.wsgi.application'
@@ -125,11 +125,11 @@ WSGI_APPLICATION = 'kobopaddy.wsgi.application'
 
 DATABASES = {
     "default": {
-        "NAME": os.getenv("POSTGRES_NAME"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "PORT": os.getenv("POSTGRES_PORT"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "NAME": config("POSTGRES_NAME"),
+        "USER": config("POSTGRES_USER"),
+        "HOST": config("POSTGRES_HOST"),
+        "PORT": config("POSTGRES_PORT"),
+        "PASSWORD": config("POSTGRES_PASSWORD"),
         "ENGINE": "django.db.backends.postgresql",
     }
 }
@@ -160,15 +160,14 @@ else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
-SERVER_EMAIL = os.getenv("SERVER_EMAIL")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
-EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT")
+SERVER_EMAIL = config("SERVER_EMAIL")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=False, cast=bool)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

@@ -58,7 +58,10 @@ class SubscribePlansSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"plan": "Plan not found"})
         if amount < plan.min_investment:
             raise serializers.ValidationError({"plan": f"Amount should be above {'{:0,.2f}'.format(plan.min_investment)}"})
-            
+
+        wallet.amount -= amount
+        wallet.save()
+
         investment = Investment(
             investor=investor,
             deposit=amount,
@@ -94,14 +97,10 @@ class WalletSerializer(serializers.ModelSerializer):
         amount = validated_data["amount"]
         request = self.context["request"]
         investor = request.user.investor_user
-        # wallet = Wallet.objects.get(investor=investor)
-        # wallet.amount += amount
-        # wallet.save()
         
         ledger = Ledger(
             amount=amount,
             investor=investor,
-            # status=APPROVAL_STATUS_CHOICES.APPROVED
         )
         ledger.save()
         return ledger
