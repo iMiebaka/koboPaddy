@@ -114,7 +114,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-print(config("REDIS_URL"))
 
 ASGI_APPLICATION = "kobopaddy.asgi.application"
 WSGI_APPLICATION = 'kobopaddy.wsgi.application'
