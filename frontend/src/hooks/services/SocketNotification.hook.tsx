@@ -4,7 +4,7 @@ import NotificationModal from "../../components/layout/NotificationModal";
 
 export default function SocketNotificationHook() {
   const [payload, setPayload] = useState<ITSocketOption | undefined>(undefined);
-  
+  const audio = new Audio('/notification-2-269292.mp3');
 
   useEffect(() => {
     const token = Cookies.get("access_token");
@@ -26,6 +26,8 @@ export default function SocketNotificationHook() {
       const data = JSON.parse(event.data);
       // console.log("Message received from server:", data);
       setPayload(data);
+      audio.play();
+
       setTimeout(() => {
         setPayload(undefined);
         document.getElementById("notification-overlay")?.classList.remove("hidden")
@@ -49,6 +51,7 @@ export default function SocketNotificationHook() {
 
   return (
     <div>
+      {/* <audio id="audio-element" src="/notification-2-269292.mp3"></audio> */}
       {payload && (
         <NotificationModal
           message={payload.message}
