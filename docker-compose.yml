@@ -1,11 +1,11 @@
 services:
-    # kobopaddy-frontend:
-    #     build:
-    #         context: ./frontend
-    #         dockerfile: Dockerfile
-    #         container_name: kobopaddy-web
-    #     ports:
-    #         - "5173:80"
+    kobopaddy-frontend:
+        container_name: kobopaddy-web
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        ports:
+            - "5173:80"
 
     kobopaddy-api:
         container_name: api
@@ -22,8 +22,6 @@ services:
             - kobopaddy-redis
         volumes:
             - .:/app
-            # - kobopaddy_mediadata:/app/mediafiles
-            # - kobopaddy_staticdata:/app/staticfiles
         ports:
             - 8000:8000
         env_file:
@@ -37,8 +35,6 @@ services:
             - KOBOPADDY_NETWORK
         volumes:
             - kobopaddy_postgresdata:/var/lib/postgresql/data/
-        # environment:
-        #     - name=value
         ports:
             - 5431:5432
         env_file:
