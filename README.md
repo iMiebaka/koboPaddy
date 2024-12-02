@@ -31,6 +31,13 @@ Or throught docker using this (NB the container has to up):
 * Fill in the required information (plan, mini_investment etc)
 * Click save
 
+![Banner](admin_ledger.png)
+
+
+![Banner](admin_ledger_two.png)
+
+
+
 ## Verify pending transaction
 To verify pending transaction, go to the Ledger category, click to open all ledger record. There you can see pending, accepted and rejected option in the tx_type drop. The investor tired to that request will recive the dedicated response.
 
