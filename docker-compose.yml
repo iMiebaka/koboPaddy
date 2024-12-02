@@ -21,7 +21,7 @@ services:
             - kobopaddy-postgresql
             - kobopaddy-redis
         volumes:
-            - .:/app
+            - kobopaddy_api:/app
         ports:
             - 8000:8000
         env_file:
@@ -67,45 +67,10 @@ services:
         env_file:
             - ./.env
 
-    # celery-worker:
-    #     container_name: celery-worker
-    #     restart: always
-    #     build:
-    #         context: ./
-    #         dockerfile: Dockerfile
-    #     command: celery -A kobopaddy worker -l info
-    #     image: celery-worker:latest
-    #     networks:
-    #         - KOBOPADDY_NETWORK
-    #     depends_on:
-    #         - redis
-    #     volumes:
-    #         - .:/app
-    #     env_file:
-    #         - ./.env
-
-    # celery-beat:
-    #     container_name: celery-beat
-    #     restart: always
-    #     build:
-    #         context: ./
-    #         dockerfile: Dockerfile
-    #     command: celery -A kobopaddy beat -l info
-    #     image: celery-beat:latest
-    #     networks:
-    #         - KOBOPADDY_NETWORK
-    #     depends_on:
-    #         - redis
-    #     volumes:
-    #         - .:/app
-    #     env_file:
-            # - ./.env
-
 volumes:
     kobopaddy_postgresdata:
     kobopaddy_redisdata:
-    # kobopaddy_mediadata:
-    # kobopaddy_staticdata:
+    kobopaddy_api:
 
 networks:
     KOBOPADDY_NETWORK:

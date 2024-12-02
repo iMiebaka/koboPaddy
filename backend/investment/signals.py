@@ -31,14 +31,14 @@ def manage_wallet_notification(sender, instance=None, created=False, **kwargs):
             if ledger.status == APPROVAL_STATUS_CHOICES.PENDING and instance.status == APPROVAL_STATUS_CHOICES.APPROVED:
                 with transaction.atomic():
                     ledger.credit_wallet(APPROVAL_STATUS_CHOICES.APPROVED)
-                    WebSocketNotification().wallet_credit_accepted(ledger.investor.pk)
+                    WebSocketNotification().wallet_credit_accepted(user_id=ledger.investor.pk)
                     thread = Thread(target=send_approved_credit_mail, args=(instance.investor.user.id, ledger.amount))
                     thread.daemon = True
                     thread.start()
                     
             elif ledger.status == APPROVAL_STATUS_CHOICES.PENDING and instance.status == APPROVAL_STATUS_CHOICES.REJECTED:
                 thread = Thread(target=send_rejection_credit_mail, args=(instance.investor.user.id, ledger.amount))
-                WebSocketNotification().wallet_credit_rejected(ledger.investor.pk)
+                WebSocketNotification().wallet_credit_rejected(user_id=ledger.investor.pk)
                 thread.daemon = True
                 thread.start()
 
@@ -53,13 +53,13 @@ def manage_wallet_notification(sender, instance=None, created=False, **kwargs):
             if ledger.status == APPROVAL_STATUS_CHOICES.PENDING and instance.status == APPROVAL_STATUS_CHOICES.APPROVED:
                 with transaction.atomic():
                     ledger.debit_wallet(APPROVAL_STATUS_CHOICES.APPROVED)
-                    WebSocketNotification().wallet_withdrawal_accepted(ledger.investor.pk)
+                    WebSocketNotification().wallet_withdrawal_accepted(user_id=ledger.investor.pk)
                     thread = Thread(target=send_approved_withdrawal_mail, args=(instance.investor.user.id, ledger.amount))
                     thread.daemon = True
                     thread.start()
                 
             if ledger.status == APPROVAL_STATUS_CHOICES.PENDING and instance.status == APPROVAL_STATUS_CHOICES.REJECTED:
-                WebSocketNotification().wallet_withdrawal_rejected(ledger.investor.pk)
+                WebSocketNotification().wallet_withdrawal_rejected(user_id=ledger.investor.pk)
                 thread = Thread(target=send_rejection_withdrawal_mail, args=(instance.investor.user.id, ledger.amount))
                 thread.daemon = True
                 thread.start()

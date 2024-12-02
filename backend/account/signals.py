@@ -8,7 +8,6 @@ from threading import Thread
 
 @receiver(post_save, sender=User)
 def verify_user(sender, instance=None, created=False, **kwargs):
-    print(instance.id)
     if instance and created and instance.is_investor:
         thread = Thread(target=send_verification_mail, args=(instance.id,))
         thread.daemon = True
