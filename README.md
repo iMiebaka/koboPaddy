@@ -31,6 +31,9 @@ Or throught docker using this (NB the container has to up):
 * Fill in the required information (plan, mini_investment etc)
 * Click save
 
+## Verify pending transaction
+To verify pending transaction, go to the Ledger category, click to open all ledger record. There you can see pending, accepted and rejected option in the tx_type drop. The investor tired to that request will recive the dedicated response.
+
 ## Become an investor
 All investor must have a have a valid account to use the platform. To fullfill this process, you have a to sign up with your fullname, email and password. Upon completion a validation link will be sent to your email. 
 Also to note that investemnt plans will make use of available balance on the wallet.
