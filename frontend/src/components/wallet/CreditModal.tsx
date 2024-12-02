@@ -9,7 +9,8 @@ export default function CreditModal({
 }: {
   toggleWalletModal: VoidFunction;
 }) {
-  const { methods, onSubmit, creditHandlerMutant, requestPrompt } = useCreditService({toggleWalletModal});
+  const { methods, onSubmit, creditHandlerMutant, requestPrompt } =
+    useCreditService({ toggleWalletModal });
   return (
     <div className="fixed w-full inset-0 h-screen backdrop-blur-sm shadow-xl">
       <section className="container mx-auto max-w-[480px] p-10 bg-white rounded-md">
@@ -20,7 +21,6 @@ export default function CreditModal({
         </div>
         <h2 className="text-2xl">Credit Wallet</h2>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          
           <Input<ITWalletTx>
             fieldName="amount"
             methods={methods}
@@ -38,18 +38,21 @@ export default function CreditModal({
               />
             </div>
           )}
-          <div className="mt-4">
-            <button
-              disabled={creditHandlerMutant.isPending}
-              className="bg-green-400 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
-            >
-              {creditHandlerMutant.isPending ? (
-                <LoadingSpinner />
-              ) : (
-                <span>Credit 💰</span>
-              )}
-            </button>
-          </div>
+
+          {!creditHandlerMutant.isSuccess && (
+            <div className="mt-4">
+              <button
+                disabled={creditHandlerMutant.isPending}
+                className="bg-green-400 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
+              >
+                {creditHandlerMutant.isPending ? (
+                  <LoadingSpinner />
+                ) : (
+                  <span>Credit 💰</span>
+                )}
+              </button>
+            </div>
+          )}
         </form>
       </section>
     </div>

@@ -10,7 +10,7 @@ export default function WithdrawModal({
   toggleWithdrawModal: VoidFunction;
 }) {
   const { methods, onSubmit, transferHandlerMutant, requestPrompt } =
-  useWithdrawService({
+    useWithdrawService({
       toggleWithdrawModal,
     });
   return (
@@ -40,18 +40,20 @@ export default function WithdrawModal({
               />
             </div>
           )}
-          <div className="mt-4">
-            <button
-              disabled={transferHandlerMutant.isPending}
-              className="bg-green-500 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
-            >
-              {transferHandlerMutant.isPending ? (
-                <LoadingSpinner />
-              ) : (
-                <span>Transfer 💸</span>
-              )}
-            </button>
-          </div>
+          {!transferHandlerMutant.isSuccess && (
+            <div className="mt-4">
+              <button
+                disabled={transferHandlerMutant.isPending}
+                className="bg-green-500 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
+              >
+                {transferHandlerMutant.isPending ? (
+                  <LoadingSpinner />
+                ) : (
+                  <span>Transfer 💸</span>
+                )}
+              </button>
+            </div>
+          )}
         </form>
       </section>
     </div>
