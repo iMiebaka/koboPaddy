@@ -1,32 +1,60 @@
-
+import Cookies from "js-cookie";
+import { useState, useEffect } from "react";
+import NotificationModal from "../../components/layout/NotificationModal";
 
 export default function SocketNotificationHook() {
-  // Create a WebSocket connection
-  const socket = new WebSocket(`${import.meta.env.FRONTEND_URL}/notifications`);
+  const [payload, setPayload] = useState<ITSocketOption | undefined>(undefined);
+  
 
-  // Event listener for when the connection is opened
-  socket.onopen = () => {
-    console.log("WebSocket connection established.");
+  useEffect(() => {
+    const token = Cookies.get("access_token");
+    if (!token) {
+      console.error("No access token found.");
+      return;
+    }
 
-    // Send a message to the server
-    socket.send(JSON.stringify({ message: "Hello Server!" }));
-  };
+    const socket = new WebSocket(
+      `${import.meta.env.VITE_APP_API_DOMAIN}/notifications/?token=${token}`
+    );
 
-  // Event listener for receiving messages from the server
-  socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    console.log("Message received from server:", data);
-  };
+    // WebSocket event listeners
+    socket.onopen = () => {
+      console.log("WebSocket connection established.");
+    };
 
-  // Event listener for errors
-  socket.onerror = (error) => {
-    console.error("WebSocket error:", error);
-  };
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      // console.log("Message received from server:", data);
+      setPayload(data);
+      setTimeout(() => {
+        setPayload(undefined);
+        document.getElementById("notification-overlay")?.classList.remove("hidden")
+      }, 4000)
+    };
 
-  // Event listener for connection closure
-  socket.onclose = (event) => {
-    console.log("WebSocket connection closed:", event);
-  };
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
 
-  return <div></div>;
+    socket.onclose = (event) => {
+      console.log("WebSocket connection closed:", event);
+    };
+
+    // Cleanup on unmount
+    return () => {
+      socket.close();
+    };
+  }, []); // Empty dependency array ensures this runs once when the component mounts
+
+
+  return (
+    <div>
+      {payload && (
+        <NotificationModal
+          message={payload.message}
+          status={payload.status}
+        />
+      )}
+    </div>
+  );
 }

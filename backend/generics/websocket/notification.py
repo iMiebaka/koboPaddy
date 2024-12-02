@@ -10,7 +10,7 @@ class WebSocketNotification:
     def broker(self, message: str, user_id: int, status: str):
         async_to_sync(self.channel_layer.group_send)(
             f'notification_{user_id}',
-            {'type': 'send', 
+            {'type': 'send.notification', 
              'message': {
               "status": status,
               "message": message

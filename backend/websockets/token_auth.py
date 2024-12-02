@@ -29,9 +29,10 @@ class TokenAuthMiddleware:
         self.app = app
 
     async def __call__(self, scope, receive, send):
-        headers = dict(scope['headers'])
+        # headers = dict(scope['headers'])
         try:
-            _, token_key = headers[b'authorization'].decode().split()
+            _, token_key = scope["query_string"].decode("utf-8").split("=")
+            # _, token_key = headers[b'authorization'].decode().split()
             scope['user'] = await get_user(token_key)
         except Exception as ex:
             await send({

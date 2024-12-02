@@ -1,6 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lora:wght@400;700&display=swap");
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Initial state for the notification */
+.notification {
+  display: block;
+  opacity: 1; /* Fully visible */
+  height: auto; /* Auto height for content */
+  overflow: hidden; /* Hide content overflow */
+  transition: opacity 1s ease, height 1s ease;
+}
+
+/* Class to hide the notification */
+.notification.hidden {
+  opacity: 0; /* Fade out */
+  pointer-events: none; /* Disable interactions when hidden */
+  transition: opacity 1s ease
+}

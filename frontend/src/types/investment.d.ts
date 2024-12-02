@@ -14,16 +14,15 @@ declare interface ITWalletTx {
   amount: string;
 }
 
-
 declare interface ITMakeInvestmentTx {
   amount: string;
-  id?: number
-  payload?: ITInvestmentPlan
+  id?: number;
+  payload?: ITInvestmentPlan;
 }
 
 declare interface ITWithdrawInvestmentTx {
   amount: string;
-  id?: number
+  id?: number;
 }
 
 declare interface ITInvestment {
@@ -43,4 +42,9 @@ declare interface ITDashboard {
   total_investments_amount: number;
   total_withdrawal: number;
   total_deposit: number;
+}
+
+declare interface ITSocketOption {
+  status: "success" | "error";
+  message: string;
 }
