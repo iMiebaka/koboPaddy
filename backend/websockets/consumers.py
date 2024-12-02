@@ -8,7 +8,7 @@ from channels.generic.websocket import WebsocketConsumer
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
         self.user = self.scope["user"]
-        self.room_group_name = f"notification_{self.user.id}"
+        self.room_group_name = f"notification_{self.user.investor_user.id}"
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name

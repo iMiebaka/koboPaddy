@@ -1,4 +1,4 @@
-import {  useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import INVESTMENT_API from "../../services/investment";
 import { useForm, useWatch } from "react-hook-form";
 import useTransferFundsPrompt from "../prompt/walletPrompt";
@@ -65,8 +65,9 @@ export function useCreditService({
   toggleWalletModal: VoidFunction;
 }) {
   const methods = useForm<ITWalletTx>();
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const requestPrompt = useGenericPrompt();
+
   const creditHandlerMutant = useMutation<any, any, ITWalletTx, any>({
     mutationFn: async (data: ITWalletTx) => {
       try {
@@ -83,7 +84,15 @@ export function useCreditService({
       }
     },
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["wallet"] });
+      queryClient.invalidateQueries({
+        queryKey: [
+          "ledger",
+          {
+            page:1,
+            page_size:20
+          },
+        ],
+      });
     },
   });
 
