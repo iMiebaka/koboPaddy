@@ -10,3 +10,5 @@ python-dotenv
 psycopg2-binary
 pillow
 redis
+python-decouple
+gunicorn
